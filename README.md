@@ -64,8 +64,6 @@ The R runner executes extracted code chunks. For a formatted HTML document, use 
 - Coefficient magnitudes depend on feature units and carrier reference categories; the heatmap is not a reliable ranking of feature importance across years. The coefficient heatmap uses full sampled fits, whereas ROC curves use separately fitted training splits.
 - Seeds are provided, but the submission has no original dependency lockfile. Exact numerical and image reproduction across versions is not guaranteed.
 
-See [AUDIT.md](AUDIT.md) for checks performed and remaining publication decisions.
-
 ## Data source and sharing
 
 The report attributes the data to the [ASA Data Expo 2009](https://community.amstat.org/jointscsg-section/dataexpo/dataexpo2009) and [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/HG7NV7). Large raw files are omitted from this browser-upload package and listed with SHA-256 checksums in `data/manifest.json`.
