@@ -1,0 +1,122 @@
+[
+  {
+    "file": "2004.csv.bz2",
+    "bytes": 110825331,
+    "sha256": "eccbb362336cf652dd350d7db6d05d532c9b3d569f8f68d62800cd053465ef12",
+    "included": false
+  },
+  {
+    "file": "2005.csv.bz2",
+    "bytes": 112450321,
+    "sha256": "3698c548ad46fbace7835dafe224f5b3e8172d215df0fcab2fbdb3ce705c05dd",
+    "included": false
+  },
+  {
+    "file": "2006.csv.bz2",
+    "bytes": 115019195,
+    "sha256": "ed1243acf2160739810370070897a9ba7b9c71506880dfe219253d9979c60fd9",
+    "included": false
+  },
+  {
+    "file": "2007.csv.bz2",
+    "bytes": 121249243,
+    "sha256": "33bdf2edf00248ab607a00582d6111320640b5d0114079249aa81ab8d0511dd5",
+    "included": false
+  },
+  {
+    "file": "2008.csv.bz2",
+    "bytes": 39277452,
+    "sha256": "aa22b6656dc71dde6e4738e66dceea6d372fcbc672564b75cb36edb2ebad84ea",
+    "included": false
+  },
+  {
+    "file": "age_delay_summary_filtered_2004_2008.csv",
+    "bytes": 6946,
+    "sha256": "b0c287ae504bee4e3558cbff7877f2282d9ca1aa33539ad2b92e94b019d7d755",
+    "included": true
+  },
+  {
+    "file": "age_group_summary_2004_2008.csv",
+    "bytes": 931,
+    "sha256": "81cc0df0ccecb567f71d3b631d23c39135af677d8e4d9be42bfe0482bfc1ceb1",
+    "included": true
+  },
+  {
+    "file": "airports.csv",
+    "bytes": 244438,
+    "sha256": "7dc3503cd31f732d9224a0e44c4d2192eacfe0dbe4044cc7fe1377c65b94b5bd",
+    "included": true
+  },
+  {
+    "file": "best_day_each_year.csv",
+    "bytes": 334,
+    "sha256": "b44dec78ed3bc4ed7b15af2c0c9585b324c9273270a0a9018e9353ed9d8973ed",
+    "included": true
+  },
+  {
+    "file": "best_hour_each_year_filtered.csv",
+    "bytes": 316,
+    "sha256": "390d706d5ac7417db4f810565a43348813d7c6f441d969cb9e9a2428a5e5770c",
+    "included": true
+  },
+  {
+    "file": "carriers.csv",
+    "bytes": 43758,
+    "sha256": "29bd60bf9468d3f2fe852366c176adfc83a213fc78b8b50850d3be98100a1bb5",
+    "included": true
+  },
+  {
+    "file": "coef_all_years_2004_2008.csv",
+    "bytes": 5364,
+    "sha256": "f92824bdc52596b93663f240e3ac07bb29a8c23b293b1d8982b87ab9ef1a820e",
+    "included": true
+  },
+  {
+    "file": "correlation_summary_2004_2008.csv",
+    "bytes": 431,
+    "sha256": "3de64c4f155224939c0647658526285475784f4e45f7755a0deb734ba78d4d32",
+    "included": true
+  },
+  {
+    "file": "delay_summary_day_2004_2008.csv",
+    "bytes": 1991,
+    "sha256": "f18581caf17007de76cb5cf58871b6465052d6316b6171850bc83cf2af1b01ea",
+    "included": true
+  },
+  {
+    "file": "delay_summary_hour_2004_2008.csv",
+    "bytes": 6132,
+    "sha256": "0b895c7f0e5b471d6a2777541d1100e8445c5505ef534916d0fbb6f9c7149114",
+    "included": true
+  },
+  {
+    "file": "model_summary_2004_2008.csv",
+    "bytes": 535,
+    "sha256": "9847d63cf033d5552c69c29e818fde775d461b623c94d4c95698c3e721b4d58d",
+    "included": true
+  },
+  {
+    "file": "plane-data.csv",
+    "bytes": 428796,
+    "sha256": "2c3d2f8b17d18fdb01341e8fec5a63dd8763494464bfe70c69aabf1a9a5247fc",
+    "included": true
+  },
+  {
+    "file": "roc_points_2004_2008.csv",
+    "bytes": 1374727,
+    "sha256": "51fea69820e90b19aa044d4f1afd18b1cf6ee20851409446303993110a620c72",
+    "included": true
+  },
+  {
+    "file": "roc_summary_2004_2008.csv",
+    "bytes": 293,
+    "sha256": "c8c3af736e3d2d04f976a858fd98272d05fa1e3ad0a479e310eef6e7403168cb",
+    "included": true
+  },
+  {
+    "file": "variable-descriptions.csv",
+    "bytes": 1091,
+    "sha256": "bcd0b5197f8c4db0084d281391cb624cb50d180dab3519fd9a118bbbe0433b3f",
+    "included": true
+  }
+]

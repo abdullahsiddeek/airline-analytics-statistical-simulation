@@ -1,0 +1,248 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+## Part 2(a)
+
+```{r load_2a}
+delay_summary_hour <- read_csv("data/delay_summary_hour_2004_2008.csv", show_col_types = FALSE)
+delay_summary_day <- read_csv("data/delay_summary_day_2004_2008.csv", show_col_types = FALSE)
+best_hour_each_year_filtered <- read_csv("data/best_hour_each_year_filtered.csv", show_col_types = FALSE)
+best_day_each_year <- read_csv("data/best_day_each_year.csv", show_col_types = FALSE)
+
+delay_summary_hour
+delay_summary_day
+```
+
+```{r check_tables}
+best_hour_each_year_filtered
+best_day_each_year
+```
+
+```{r plot_hourly_2a}
+delay_summary_hour_filtered <- delay_summary_hour %>%
+  filter(n_flights >= 10000)
+
+p2a_hour_r <- ggplot(delay_summary_hour_filtered, aes(x = sched_dep_hour)) +
+  geom_line(aes(y = mean_arr_delay, color = "Mean arrival delay"), linewidth = 0.8) +
+  geom_line(aes(y = mean_dep_delay, color = "Mean departure delay"), linewidth = 0.8) +
+  facet_wrap(~ Year, ncol = 1) +
+  labs(
+    title = "Mean delays by scheduled departure hour (2004-2008)",
+    x = "Scheduled departure hour",
+    y = "Minutes",
+    color = ""
+  ) +
+  theme_minimal()
+
+p2a_hour_r
+```
+
+```{r save_hourly_2a}
+ggsave("part2_r_2a_hourly_delay.png", plot = p2a_hour_r, width = 8, height = 14, dpi = 300)
+```
+
+```{r plot_day_2a}
+delay_summary_day$day_name <- factor(
+  delay_summary_day$day_name,
+  levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+)
+
+p2a_day_r <- ggplot(delay_summary_day, aes(x = day_name, group = 1)) +
+  geom_line(aes(y = mean_arr_delay, color = "Mean arrival delay"), linewidth = 0.8) +
+  geom_point(aes(y = mean_arr_delay, color = "Mean arrival delay"), size = 1.8) +
+  geom_line(aes(y = mean_dep_delay, color = "Mean departure delay"), linewidth = 0.8) +
+  geom_point(aes(y = mean_dep_delay, color = "Mean departure delay"), size = 1.8) +
+  facet_wrap(~ Year, ncol = 1) +
+  labs(
+    title = "Mean delays by day of week (2004-2008)",
+    x = "Day of week",
+    y = "Minutes",
+    color = ""
+  ) +
+  theme_minimal()
+
+p2a_day_r
+```
+
+```{r save_day_2a}
+ggsave("part2_r_2a_day_delay.png", plot = p2a_day_r, width = 8, height = 14, dpi = 300)
+```
+
+## Part 2(b)
+
+```{r load_2b}
+age_group_summary <- read_csv("data/age_group_summary_2004_2008.csv", show_col_types = FALSE)
+age_delay_summary_filtered <- read_csv("data/age_delay_summary_filtered_2004_2008.csv", show_col_types = FALSE)
+correlation_summary <- read_csv("data/correlation_summary_2004_2008.csv", show_col_types = FALSE)
+
+age_group_summary
+age_delay_summary_filtered
+correlation_summary
+```
+
+```{r plot_2b_bar}
+p2b_bar_r <- ggplot(age_group_summary, aes(x = factor(Year), y = mean_total_delay, fill = AgeGroup)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Mean total delay by aircraft age group and year",
+    x = "Year",
+    y = "Mean total delay (minutes)",
+    fill = "Aircraft age group"
+  ) +
+  theme_minimal()
+
+p2b_bar_r
+```
+
+```{r save_2b_bar}
+ggsave("part2_r_2b_agegroup_bar.png", plot = p2b_bar_r, width = 8, height = 5, dpi = 300)
+```
+
+```{r plot_2b_trend_combined}
+p2b_trend_r <- ggplot(age_delay_summary_filtered,
+                      aes(x = PlaneAge, y = mean_total_delay, color = factor(Year))) +
+  geom_line(linewidth = 0.9) +
+  labs(
+    title = "Plane age vs mean total delay by year",
+    x = "Plane age",
+    y = "Mean total delay (minutes)",
+    color = "Year"
+  ) +
+  theme_minimal()
+
+p2b_trend_r
+```
+
+```{r save_2b_trend_combined}
+ggsave("part2_r_2b_age_trend_combined.png", plot = p2b_trend_r, width = 9, height = 6, dpi = 300)
+```
+
+```{r plot_2b_overlay}
+corr_labels <- age_delay_summary_filtered %>%
+  group_by(Year) %>%
+  summarise(corr = cor(PlaneAge, mean_total_delay), .groups = "drop") %>%
+  mutate(label = paste0(Year, " (r=", sprintf("%.2f", corr), ")"))
+
+age_delay_overlay <- age_delay_summary_filtered %>%
+  left_join(corr_labels %>% select(Year, label), by = "Year")
+
+p2b_overlay_r <- ggplot(age_delay_overlay,
+                        aes(x = PlaneAge, y = mean_total_delay, color = label)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", se = TRUE, linewidth = 0.9) +
+  labs(
+    title = "Plane age vs mean total delay by year",
+    x = "Plane age",
+    y = "Mean total delay (minutes)",
+    color = "Year & correlation"
+  ) +
+  theme_minimal()
+
+p2b_overlay_r
+```
+
+```{r save_2b_overlay}
+ggsave("part2_r_2b_age_regression_overlay.png", plot = p2b_overlay_r, width = 9, height = 6, dpi = 300)
+```
+
+## Part 2(c)
+
+```{r load_2c}
+coef_all_years <- read_csv("data/coef_all_years_2004_2008.csv", show_col_types = FALSE)
+model_summary <- read_csv("data/model_summary_2004_2008.csv", show_col_types = FALSE)
+roc_summary <- read_csv("data/roc_summary_2004_2008.csv", show_col_types = FALSE)
+roc_points <- read_csv("data/roc_points_2004_2008.csv", show_col_types = FALSE)
+
+coef_all_years
+model_summary
+roc_summary
+```
+
+```{r class_balance_2c}
+balance_plot_df <- model_summary %>%
+  select(year, n_diverted_fit, n_not_diverted_fit) %>%
+  tidyr::pivot_longer(
+    cols = c(n_diverted_fit, n_not_diverted_fit),
+    names_to = "class",
+    values_to = "count"
+  ) %>%
+  mutate(class = recode(
+    class,
+    n_diverted_fit = "Diverted",
+    n_not_diverted_fit = "Not diverted"
+  ))
+
+p2c_balance_r <- ggplot(balance_plot_df, aes(x = factor(year), y = count, fill = class)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Sampled class balance used for yearly logistic regression",
+    x = "Year",
+    y = "Number of flights",
+    fill = "Class"
+  ) +
+  theme_minimal()
+
+p2c_balance_r
+```
+
+```{r save_class_balance_2c}
+ggsave("part2_r_2c_class_balance.png", plot = p2c_balance_r, width = 8, height = 5, dpi = 300)
+```
+
+```{r coefficients_heatmap_2c}
+top_features <- coef_all_years %>%
+  mutate(abs_coef = abs(coefficient)) %>%
+  group_by(feature) %>%
+  summarise(mean_abs_coef = mean(abs_coef), .groups = "drop") %>%
+  arrange(desc(mean_abs_coef)) %>%
+  slice_head(n = 12) %>%
+  pull(feature)
+
+coef_heatmap_df <- coef_all_years %>%
+  filter(feature %in% top_features)
+
+p2c_heatmap_r <- ggplot(coef_heatmap_df, aes(x = factor(year), y = reorder(feature, coefficient), fill = coefficient)) +
+  geom_tile() +
+  geom_text(aes(label = sprintf("%.2f", coefficient)), size = 3) +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0) +
+  labs(
+    title = "Top logistic regression coefficients across years",
+    x = "Year",
+    y = "Feature",
+    fill = "Coefficient"
+  ) +
+  theme_minimal()
+
+p2c_heatmap_r
+```
+
+```{r save_coefficients_heatmap_2c}
+ggsave("part2_r_2c_coefficients_heatmap.png", plot = p2c_heatmap_r, width = 8, height = 6, dpi = 300)
+```
+
+```{r roc_curve_2c}
+p2c_roc_r <- ggplot(roc_points, aes(x = fpr, y = tpr, color = factor(year))) +
+  geom_line(linewidth = 1) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
+  labs(
+    title = "ROC curves for yearly logistic regression models",
+    x = "False Positive Rate",
+    y = "True Positive Rate",
+    color = "Year"
+  ) +
+  theme_minimal()
+
+p2c_roc_r
+```
+
+```{r save_roc_curve_2c}
+ggsave("part2_r_2c_roc_curves.png", plot = p2c_roc_r, width = 8, height = 6, dpi = 300)
+```
+
+```{r auc_table_2c}
+roc_summary
+```

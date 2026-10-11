@@ -1,0 +1,8 @@
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) != 1 || !args[1] %in% c('1', '2')) stop('From repository root: Rscript scripts/run_r.R 1 (or 2)')
+file <- paste0('240672870_part', args[1], '_r.Rmd')
+if (!file.exists(file)) stop('Run from the repository root.')
+code <- tempfile(fileext = '.R')
+knitr::purl(file, output = code, quiet = TRUE)
+source(code, echo = TRUE)
+unlink(code)

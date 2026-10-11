@@ -1,0 +1,166 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(ggplot2)
+set.seed(2195)
+```
+
+## Part 1(a)
+
+```{r functions_a}
+target_density <- function(x) {
+  0.5 * exp(-abs(x))
+}
+
+log_target_density <- function(x) {
+  log(0.5) - abs(x)
+}
+
+rw_metropolis <- function(N, s, x0) {
+  x <- numeric(N + 1)
+  x[1] <- x0
+  
+  for (i in 2:(N + 1)) {
+    x_star <- rnorm(1, mean = x[i - 1], sd = s)
+    log_r <- log_target_density(x_star) - log_target_density(x[i - 1])
+    log_u <- log(runif(1))
+    
+    if (log_u < log_r) {
+      x[i] <- x_star
+    } else {
+      x[i] <- x[i - 1]
+    }
+  }
+  
+  x
+}
+```
+
+```{r run_a}
+N_a <- 10000
+s_a <- 1
+x0_a <- 0
+
+chain_a <- rw_metropolis(N = N_a, s = s_a, x0 = x0_a)
+samples_a <- chain_a[-1]
+
+mc_mean <- mean(samples_a)
+mc_sd <- sd(samples_a)
+
+summary_a <- data.frame(
+  Statistic = c("Sample mean", "Sample standard deviation"),
+  Value = c(mc_mean, mc_sd)
+)
+
+summary_a
+```
+
+```{r plot_a}
+plot_df_a <- data.frame(x = samples_a)
+
+p1a_plot <- ggplot(plot_df_a, aes(x = x)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 50,
+                 fill = "skyblue",
+                 color = "black",
+                 alpha = 0.7) +
+  geom_density(color = "red", linewidth = 1) +
+  stat_function(fun = target_density,
+                color = "blue",
+                linewidth = 1,
+                linetype = "dashed") +
+  labs(
+    title = "Random Walk Metropolis Samples",
+    subtitle = "Histogram, kernel density estimate, and target density",
+    x = "x",
+    y = "Density"
+  ) +
+  theme_minimal()
+
+p1a_plot
+```
+
+```{r save_plot_a}
+ggsave("part1_r_plot_a.png", plot = p1a_plot, width = 7, height = 4.5, dpi = 300)
+```
+
+## Part 1(b)
+
+```{r functions_b}
+compute_rb <- function(chains) {
+  J <- nrow(chains)
+  N <- ncol(chains)
+  
+  Mj <- rowMeans(chains)
+  Vj <- apply(chains, 1, function(z) mean((z - mean(z))^2))
+  
+  W <- mean(Vj)
+  M <- mean(Mj)
+  B <- mean((Mj - M)^2)
+  
+  sqrt((B + W) / W)
+}
+
+generate_chains <- function(N, s, init_vals) {
+  J <- length(init_vals)
+  out <- matrix(0, nrow = J, ncol = N)
+  
+  for (j in seq_len(J)) {
+    out[j, ] <- rw_metropolis(N = N, s = s, x0 = init_vals[j])[-1]
+  }
+  
+  out
+}
+```
+
+```{r run_b}
+N_b <- 2000
+s_b <- 0.001
+J_b <- 4
+x0_b <- 0
+init_vals <- rep(x0_b, J_b) 
+
+set.seed(2195)
+chains_b <- generate_chains(N = N_b, s = s_b, init_vals = init_vals)
+rb_0001 <- compute_rb(chains_b)
+
+rb_result <- data.frame(
+  s = s_b,
+  J = J_b,
+  N = N_b,
+  Rb = rb_0001
+)
+
+rb_result
+```
+
+```{r rb_grid}
+set.seed(2195)
+s_grid <- seq(0.001, 1, length.out = 120)
+
+rb_grid <- sapply(s_grid, function(s_now) {
+  chains_now <- generate_chains(N = N_b, s = s_now, init_vals = init_vals)
+  compute_rb(chains_now)
+})
+
+rb_plot_df <- data.frame(s = s_grid, Rb = rb_grid)
+head(rb_plot_df)
+```
+
+```{r rb_plot}
+p1b_plot <- ggplot(rb_plot_df, aes(x = s, y = Rb)) +
+  geom_line(color = "darkgreen", linewidth = 1) +
+  geom_point(color = "darkgreen", size = 1) +
+  geom_hline(yintercept = 1.05, linetype = "dashed", color = "red") +
+  labs(
+    title = "Rb over a grid of s values",
+    x = "Proposal standard deviation s",
+    y = "Rb"
+  ) +
+  theme_minimal()
+
+p1b_plot
+```
+
+```{r save_plot_b}
+ggsave("part1_r_plot_b.png", plot = p1b_plot, width = 7, height = 4.5, dpi = 300)
+```
