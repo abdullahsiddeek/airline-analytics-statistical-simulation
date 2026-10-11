@@ -1,4 +1,4 @@
-# Programming for Data Science
+# Airline Analytics and Statistical Simulation
 
 University of London ST2195 coursework in Python and R. This project brings together a random walk Metropolis simulation and an analysis of US domestic flight delays and diversions from 2004 to April 2008.
 
