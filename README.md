@@ -16,11 +16,11 @@ The supplied results suggest:
 
 ## Selected figures
 
-![Metropolis samples and target density](figures/part1_python_plot_a.png)
+![Metropolis samples and target density](images/part1_python_plot_a.png)
 
-![Aircraft age and delay](figures/part2_r_2b_agegroup_bar.png)
+![Aircraft age and delay](images/part2_r_2b_agegroup_bar.png)
 
-![Yearly diversion ROC curves](figures/part2_python_2c_roc_curves.png)
+![Yearly diversion ROC curves](images/part2_python_2c_roc_curves.png)
 
 ## Files
 
